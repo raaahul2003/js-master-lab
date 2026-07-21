@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A modern, interactive JavaScript learning platform built from tutor notes." />
+    <meta name="theme-color" content="#111827" />
+    <title>JavaScript Mastery Lab</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f8fb;
+        --surface: #ffffff;
+        --surface-strong: #fcfcfd;
+        --text: #111827;
+        --muted: #5b6472;
+        --accent: #4b5563;
+        --accent-2: #64748b;
+        --border: #e5e7eb;
+        --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        --success: #2563eb;
+        --warning: #b45309;
+      }
+
+      body.dark {
+        color-scheme: dark;
+        --bg: #0f172a;
+        --surface: #111827;
+        --surface-strong: #1f2937;
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+        --accent: #e2e8f0;
+        --accent-2: #94a3b8;
+        --border: #334155;
+        --shadow: 0 6px 18px rgba(2, 8, 23, 0.25);
+        --success: #93c5fd;
+        --warning: #fbbf24;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        min-height: 100vh;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+
+      .page-shell {
+        min-height: 100vh;
+      }
+
+      .container {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 0 auto;
+      }
+
+      .hero {
+        padding: 1.2rem 0 3rem;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0 1.4rem;
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(18px);
+        z-index: 15;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-weight: 800;
+        font-size: 1.05rem;
+        letter-spacing: 0.02em;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: var(--text);
+        color: var(--surface);
+      }
+
+      .topbar-actions {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .btn {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.75rem 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: var(--text);
+        color: var(--surface);
+        border-color: var(--text);
+      }
+
+      .btn-secondary {
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 1.5rem;
+        align-items: center;
+      }
+
+      .hero-card,
+      .panel,
+      .sidebar-card,
+      .lesson-card,
+      .section-card,
+      .quiz-card,
+      .feature-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .hero-card {
+        padding: 1.3rem;
+        border-radius: 20px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.7rem;
+        border-radius: 999px;
+        background: var(--surface-strong);
+        color: var(--accent);
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+        border: 1px solid var(--border);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0 0 0.55rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        line-height: 1.05;
+      }
+
+      .hero p {
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin: 1rem 0 1.35rem;
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.8rem;
+      }
+
+      .stat-box {
+        padding: 0.9rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.45);
+        border: 1px solid var(--border);
+        text-align: center;
+      }
+
+      body.dark .stat-box {
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .stat-box strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .stat-box span {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .roadmap,
+      .features {
+        padding: 1rem 0 2rem;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 1rem;
+      }
+
+      .section-head p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .feature-card,
+      .panel {
+        padding: 1.1rem;
+        border-radius: 20px;
+      }
+
+      .feature-card h3 {
+        margin-bottom: 0.4rem;
+      }
+
+      .lesson-layout {
+        display: grid;
+        grid-template-columns: minmax(270px, 320px) 1fr;
+        gap: 1.2rem;
+        padding-bottom: 3rem;
+      }
+
+      .sidebar-card {
+        border-radius: 24px;
+        padding: 1rem;
+        position: sticky;
+        top: 6rem;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.8rem 0.9rem;
+        border-radius: 999px;
+        background: var(--surface-strong);
+        border: 1px solid var(--border);
+        margin-bottom: 0.9rem;
+      }
+
+      .search-box input {
+        border: 0;
+        outline: 0;
+        width: 100%;
+        background: transparent;
+        color: var(--text);
+      }
+
+      .progress-card {
+        padding: 0.9rem;
+        border-radius: 16px;
+        background: var(--surface-strong);
+        border: 1px solid var(--border);
+        margin-bottom: 1rem;
+      }
+
+      .bar {
+        width: 100%;
+        height: 10px;
+        background: rgba(148, 163, 184, 0.24);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+      }
+
+      .bar > span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: var(--text);
+        transition: width 0.3s ease;
+      }
+
+      .nav-list {
+        display: grid;
+        gap: 0.55rem;
+        max-height: 60vh;
+        overflow: auto;
+        padding-right: 0.25rem;
+      }
+
+      .lesson-nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        border: 1px solid transparent;
+        padding: 0.8rem 0.8rem;
+        border-radius: 14px;
+        background: var(--surface-strong);
+        cursor: pointer;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+
+      .lesson-nav-item:hover {
+        transform: translateX(2px);
+        border-color: var(--accent);
+      }
+
+      .lesson-nav-item.active {
+        border-color: var(--accent);
+        box-shadow: 0 8px 24px rgba(79, 70, 229, 0.16);
+      }
+
+      .nav-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      .nav-meta {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.3rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .pill.complete {
+        background: rgba(52, 211, 153, 0.16);
+        color: var(--success);
+      }
+
+      .pill.bookmarked {
+        background: rgba(251, 191, 36, 0.18);
+        color: var(--warning);
+      }
+
+      .content-stack {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .lesson-card {
+        border-radius: 24px;
+        padding: 1.2rem;
+        animation: fadeUp 0.35s ease both;
+      }
+
+      .lesson-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: start;
+        margin-bottom: 1rem;
+      }
+
+      .lesson-header p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .lesson-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+
+      .chip {
+        padding: 0.55rem 0.8rem;
+        background: var(--surface-strong);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .section-card {
+        margin-top: 1rem;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .section-card summary {
+        padding: 1rem 1.1rem;
+        cursor: pointer;
+        font-weight: 700;
+        list-style: none;
+      }
+
+      .section-card summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .section-body {
+        padding: 0 1.1rem 1rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .mini-card {
+        padding: 0.95rem;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.45);
+        border: 1px solid var(--border);
+      }
+
+      body.dark .mini-card {
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .code-block {
+        white-space: pre-wrap;
+        overflow: auto;
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 16px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .code-toolbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+        align-items: center;
+        margin: 0.6rem 0 0.4rem;
+      }
+
+      .editor-shell {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 170px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        padding: 0.95rem;
+        background: var(--surface-strong);
+        color: var(--text);
+        resize: vertical;
+      }
+
+      .output {
+        border-radius: 16px;
+        padding: 0.95rem;
+        min-height: 90px;
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: ui-monospace, SFMono-Regular, Monaco, monospace;
+        white-space: pre-wrap;
+      }
+
+      .quiz-grid {
+        display: grid;
+        gap: 0.7rem;
+      }
+
+      .quiz-option {
+        background: var(--surface-strong);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.75rem 0.9rem;
+        cursor: pointer;
+      }
+
+      .quiz-option:hover {
+        border-color: var(--accent);
+      }
+
+      .quiz-option.correct {
+        border-color: var(--success);
+        background: rgba(52, 211, 153, 0.16);
+      }
+
+      .quiz-option.incorrect {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.12);
+      }
+
+      .check-list {
+        display: grid;
+        gap: 0.5rem;
+        padding-left: 0.1rem;
+      }
+
+      .check-list li {
+        margin-left: 1rem;
+      }
+
+      .empty-state {
+        padding: 1rem;
+        text-align: center;
+        border-radius: 16px;
+        border: 1px dashed var(--border);
+        color: var(--muted);
+      }
+
+      .hide-mobile {
+        display: inline;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 980px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .lesson-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar-card {
+          position: static;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .cards-grid,
+        .grid-2,
+        .hero-stats {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
+          flex-wrap: wrap;
+          gap: 0.7rem;
+        }
+
+        .hide-mobile {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="container topbar">
+          <a class="brand" href="#top">
+            <span class="brand-mark">JS</span>
+            <span>JavaScript Mastery Lab</span>
+          </a>
+          <div class="topbar-actions">
+            <button class="btn btn-secondary" id="themeToggle" aria-label="Toggle dark mode">🌙 Theme</button>
+            <a class="btn btn-primary" href="#curriculum">Start Learning</a>
+          </div>
+        </div>
+
+        <div class="container hero-grid" id="top">
+          <div>
+            <div class="eyebrow">Beginner to Intermediate • Tutor Notes Expanded</div>
+            <h1>Learn JavaScript with clarity, practice, and confidence.</h1>
+            <p>
+              Every tutor note becomes a lesson with beginner-friendly explanations, examples, diagrams,
+              interactive coding, quizzes, and projects. The platform fills the gaps automatically so you can
+              learn the full language even when the notes are brief.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#curriculum">Explore the syllabus</a>
+              <a class="btn btn-secondary" href="#lessons">Jump to lessons</a>
+            </div>
+            <div class="hero-stats">
+              <div class="stat-box"><strong id="lessonCount">0</strong><span>Lessons</span></div>
+              <div class="stat-box"><strong id="completedCount">0</strong><span>Completed</span></div>
+              <div class="stat-box"><strong id="bookmarkCount">0</strong><span>Bookmarks</span></div>
+            </div>
+          </div>
+
+          <div class="hero-card">
+            <h3>Learning roadmap</h3>
+            <p>From variables and operators to functions, DOM, and async JavaScript.</p>
+            <div class="grid-2" style="margin-top: 0.8rem;">
+              <div class="mini-card">
+                <strong>📘 Theory</strong>
+                <p>Concepts explained in plain English and with diagrams.</p>
+              </div>
+              <div class="mini-card">
+                <strong>🧪 Practice</strong>
+                <p>Quizzes, challenges, and mini projects after each lesson.</p>
+              </div>
+              <div class="mini-card">
+                <strong>💻 Playground</strong>
+                <p>Edit code, run it, and inspect output instantly.</p>
+              </div>
+              <div class="mini-card">
+                <strong>📈 Progress</strong>
+                <p>Your progress is saved locally so you can resume anytime.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="roadmap container" id="curriculum">
+        <div class="section-head">
+          <div>
+            <h2>What you will learn</h2>
+            <p>A complete beginner-to-intermediate JavaScript path shaped by your tutor notes.</p>
+          </div>
+        </div>
+        <div class="cards-grid">
+          <article class="feature-card">
+            <h3>Foundation</h3>
+            <p>Understand variables, data types, scope, hoisting, and the JavaScript runtime.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Logic</h3>
+            <p>Master conditions, loops, operators, functions, and reusable code patterns.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Real Web Development</h3>
+            <p>Use arrays, objects, DOM events, forms, async JavaScript, and storage APIs.</p>
+          </article>
+        </div>
+      </section>
+
+      <main class="lesson-layout container" id="lessons">
+        <aside class="sidebar-card" aria-label="Lesson navigation">
+          <div class="search-box">
+            <span>🔎</span>
+            <input id="lessonSearch" type="search" placeholder="Search lessons or concepts" aria-label="Search lessons" />
+          </div>
+
+          <div class="progress-card">
+            <div class="bar" aria-hidden="true"><span id="progressBar"></span></div>
+            <div id="progressText">0% complete</div>
+          </div>
+
+          <div class="section-head" style="margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1rem;">Lessons</h3>
+            <span class="pill" id="filterPill">All</span>
+          </div>
+          <nav id="lessonNav" class="nav-list" aria-label="Lesson list"></nav>
+        </aside>
+
+        <section class="content-stack" id="lessonContent"></section>
+      </main>
+    </div>
+
+    <script>
+      const lessons = [
+        {
+          id: "foundation",
+          title: "JavaScript Foundations",
+          subtitle: "What JavaScript is, how it runs, and why it powers the web",
+          tutorNotes: "JS is a high-level programming language used to make webpages dynamic. Node.js provides a runtime environment plus libraries.",
+          intro: "JavaScript turns static web pages into interactive experiences. It runs in browsers and also on servers with Node.js, making it one of the most useful languages for modern web development.",
+          deepExplanation: "Think of JavaScript as the behavior layer of a webpage. HTML gives structure, CSS gives appearance, and JavaScript gives action. When a user clicks a button, submits a form, or scrolls, JavaScript can respond immediately.",
+          visual: [
+            "HTML → Structure",
+            "CSS → Style",
+            "JavaScript → Behavior"
+          ],
+          syntax: `console.log("Hello, JavaScript!");`,
+          examples: [
+            {
+              title: "Hello message",
+              code: `console.log("Welcome to JavaScript");`,
+              output: "Welcome to JavaScript",
+              explanation: "console.log prints output to the browser console."
+            },
+            {
+              title: "A webpage interaction",
+              code: `document.body.style.background = "#fef3c7";`,
+              output: "Changes the page background",
+              explanation: "JavaScript can update page styles dynamically."
+            }
+          ],
+          playground: `console.log("Start learning");
+const message = "JavaScript makes websites alive";
+console.log(message);`,
+          execution: [
+            "The engine reads the code line by line.",
+            "console.log prints the value to the console.",
+            "The variable stores the string in memory."
+          ],
+          mistakes: [
+            "Forgetting semicolons is not required in JavaScript, but keeping them improves clarity.",
+            "Using single quotes vs double quotes is fine as long as you stay consistent."
+          ],
+          practices: [
+            "Print a message with your name.",
+            "Change the background color of the page with JavaScript."
+          ],
+          quiz: [
+            { q: "What does console.log do?", options: ["Creates a file", "Prints a value to the console", "Styles a page", "Creates a loop"], answer: 1 },
+            { q: "Which layer controls styling?", options: ["HTML", "CSS", "JavaScript", "JSON"], answer: 1 }
+          ],
+          challenge: {
+            prompt: "Create a small greeting script that prints a welcome message and your favorite color.",
+            starter: `const name = "Ava";
+const color = "blue";
+`,
+            solution: `const name = "Ava";
+const color = "blue";
+console.log("Hello " + name + ", your favorite color is " + color);`
+          }
+        },
+        {
+          id: "datatypes",
+          title: "Data Types & Values",
+          subtitle: "Understanding primitive and non-primitive values",
+          tutorNotes: "Data types include Number, String, Boolean, Undefined, null, BigInt, Symbol, Array, and Object.",
+          intro: "Every value in JavaScript belongs to a type. Types help the engine understand what kind of data it is handling.",
+          deepExplanation: "Primitive values are simple values such as numbers and strings. Non-primitive values are more complex structures like arrays and objects that can hold collections of data.",
+          visual: [
+            "Primitive: 42, 'hello', true",
+            "Complex: [1, 2, 3], { name: 'Ada' }"
+          ],
+          syntax: `let score = 42;
+let name = "Ada";
+let isReady = true;`,
+          examples: [
+            {
+              title: "Number",
+              code: `let age = 21;
+console.log(typeof age);`,
+              output: "number",
+              explanation: "Numbers represent numeric values."
+            },
+            {
+              title: "String",
+              code: `let language = "JavaScript";
+console.log(language.toUpperCase());`,
+              output: "JAVASCRIPT",
+              explanation: "Strings store text and have useful methods."
+            },
+            {
+              title: "Array",
+              code: `const colors = ["red", "green", "blue"];
+console.log(colors[1]);`,
+              output: "green",
+              explanation: "Arrays store ordered collections of values."
+            }
+          ],
+          playground: `const data = [1, 2, 3];
+const total = data.length;
+console.log(total);`,
+          execution: [
+            "The array is created in memory.",
+            "The length property is read.",
+            "The engine logs the count."
+          ],
+          mistakes: [
+            "Confusing null with undefined.",
+            "Using typeof on arrays returns object, so inspect them carefully."
+          ],
+          practices: [
+            "Create a string, a number, and a boolean.",
+            "Use typeof to inspect each value."
+          ],
+          quiz: [
+            { q: "What does typeof true return?", options: ["string", "number", "boolean", "object"], answer: 2 },
+            { q: "Which is a non-primitive type?", options: ["Number", "String", "Boolean", "Array"], answer: 3 }
+          ],
+          challenge: {
+            prompt: "Create an object with your name, age, and favorite language, then print it to the console.",
+            starter: `const profile = {}`,
+            solution: `const profile = { name: "Mina", age: 20, favoriteLanguage: "JavaScript" };
+console.log(profile);`
+          }
+        },
+        {
+          id: "identifiers",
+          title: "Identifiers, Keywords & Naming",
+          subtitle: "How names are created and why they matter",
+          tutorNotes: "Identifiers are programmer-created names for variables, classes, and functions. Keywords are reserved words such as let, var, and if.",
+          intro: "A good identifier makes code readable. JavaScript has rules for what names are valid and reserved words that cannot be reused.",
+          deepExplanation: "Identifiers should be descriptive. Instead of x or data, use userName or totalPrice. Clear names make debugging easier and help other developers understand your code quickly.",
+          visual: [
+            "Valid: userName, _count, firstName2",
+            "Invalid: 2name, class, let"
+          ],
+          syntax: `let userName = "Ava";
+const totalPrice = 120;`,
+          examples: [
+            {
+              title: "Valid identifiers",
+              code: `let firstName = "Lina";
+let _count = 3;`,
+              output: "No error",
+              explanation: "These names follow JavaScript naming rules."
+            },
+            {
+              title: "Invalid identifiers",
+              code: `let 2name = "A";`,
+              output: "SyntaxError",
+              explanation: "Identifiers cannot start with a digit."
+            }
+          ],
+          playground: `const userName = "Ava";
+const welcome = "Hi " + userName;
+console.log(welcome);`,
+          execution: [
+            "The engine creates the variable names.",
+            "It assigns the strings to memory.",
+            "The concatenated result is printed."
+          ],
+          mistakes: [
+            "Using a reserved keyword as a variable name.",
+            "Choosing names that are too short or unclear."
+          ],
+          practices: [
+            "Create identifiers for student name and course fee.",
+            "Explain why descriptive names are better than single letters."
+          ],
+          quiz: [
+            { q: "Which name is valid?", options: ["2name", "let", "userName", "class"], answer: 2 },
+            { q: "Why do descriptive names matter?", options: ["They slow code down", "They make code easier to read", "They change how JavaScript works", "They are required by the browser"], answer: 1 }
+          ],
+          challenge: {
+            prompt: "Create three clear variable names for a product price, stock count, and product name.",
+            starter: `let p = 10;`,
+            solution: `let productPrice = 10;
+let stockCount = 5;
+let productName = "Laptop";`
+          }
+        },
+        {
+          id: "variables",
+          title: "Variables, Scope & Hoisting",
+          subtitle: "How values are stored and accessed in JavaScript",
+          tutorNotes: "Variables hold data temporarily. var has function scope, let and const have block scope. Hoisting moves declarations to the top of a scope during compilation.",
+          intro: "Variables are containers for values. They let your programs remember information while they run.",
+          deepExplanation: "Use let when a value may change. Use const when the value should remain fixed. var is older and behaves differently because it is function-scoped and hoisted in a less predictable way.",
+          visual: [
+            "Global scope: accessible everywhere",
+            "Function scope: accessible inside a function",
+            "Block scope: accessible inside braces"
+          ],
+          syntax: `var name = "Asha";
+let age = 20;
+const pi = 3.14;`,
+          examples: [
+            {
+              title: "var behavior",
+              code: `if (true) {
+  var message = "Hello";
+}
+console.log(message);`,
+              output: "Hello",
+              explanation: "var ignores block boundaries."
+            },
+            {
+              title: "let and const",
+              code: `if (true) {
+  let count = 1;
+  const fixed = 3;
+}
+console.log(count);`,
+              output: "ReferenceError",
+              explanation: "let and const stay inside the block."
+            }
+          ],
+          playground: `let score = 10;
+score = 15;
+console.log(score);`,
+          execution: [
+            "The variable is created.",
+            "A value is assigned.",
+            "The updated value is printed."
+          ],
+          mistakes: [
+            "Reassigning const.",
+            "Assuming var behaves like let."
+          ],
+          practices: [
+            "Create one variable with let and one with const.",
+            "Explain the difference between block scope and function scope."
+          ],
+          quiz: [
+            { q: "Which keyword is best for a value that should not change?", options: ["var", "let", "const", "if"], answer: 2 },
+            { q: "What does hoisting mean?", options: ["A type of loop", "Moving declarations upward", "Creating a function", "Deleting variables"], answer: 1 }
+          ],
+          challenge: {
+            prompt: "Create a counter that increases by 1 each time the code runs and prints the result.",
+            starter: `let count = 0;
+`,
+            solution: `let count = 0;
+count = count + 1;
+console.log(count);`
+          }
+        },
+        {
+          id: "operators",
+          title: "Operators & Expressions",
+          subtitle: "Combining values and making comparisons",
+          tutorNotes: "JavaScript supports assignment, arithmetic, relational, logical, unary, and shorthand operators.",
+          intro: "Operators let you calculate values, compare values, and control logic.",
+          deepExplanation: "Arithmetic operators handle math, relational operators compare values, and logical operators combine conditions. The === operator is especially useful because it checks both value and type.",
+          visual: [
+            "Assignment: =",
+            "Arithmetic: +, -, *, /, %, **",
+            "Comparison: ==, ===, !=, >, <"
+          ],
+          syntax: `let total = 10 + 5;
+let isEqual = 10 === 10;`,
+          examples: [
+            {
+              title: "Arithmetic",
+              code: `let result = 8 % 3;
+console.log(result);`,
+              output: "2",
+              explanation: "% returns the remainder."
+            },
+            {
+              title: "Comparison",
+              code: `console.log(5 === "5");`,
+              output: "false",
+              explanation: "The values are the same, but the types differ."
+            }
+          ],
+          playground: `let a = 12;
+let b = 7;
+console.log(a + b);
+console.log(a > b);`,
+          execution: [
+            "The numbers are added.",
+            "The comparison is evaluated.",
+            "Both results are logged."
+          ],
+          mistakes: [
+            "Using == when === is safer.",
+            "Forgetting operator precedence."
+          ],
+          practices: [
+            "Use a shorthand operator to increase a number.",
+            "Compare two values using ===."
+          ],
+          quiz: [
+            { q: "What does % return?", options: ["Product", "Difference", "Remainder", "Power"], answer: 2 },
+            { q: "Which operator checks both value and type?", options: ["==", "=", "!=", "==="], answer: 3 }
+          ],
+          challenge: {
+            prompt: "Write code that checks whether a user is old enough to vote.",
+            starter: `const age = 18;`,
+            solution: `const age = 18;
+console.log(age >= 18 ? "Eligible" : "Not eligible");`
+          }
+        },
+        {
+          id: "conditions",
+          title: "Conditions, Loops & Decisions",
+          subtitle: "Choosing paths and repeating actions",
+          tutorNotes: "Use if, if-else, else-if, switch, and loops to control program flow.",
+          intro: "Programs make decisions. Conditions check whether something is true or false, then the code follows a path.",
+          deepExplanation: "Loops repeat tasks without rewriting the same code. They are perfect for working with lists, counters, or repeated actions.",
+          visual: [
+            "Condition → true or false",
+            "Loop → repeated iteration"
+          ],
+          syntax: `if (age >= 18) {
+  console.log("Eligible");
+} else {
+  console.log("Not eligible");
+}`,
+          examples: [
+            {
+              title: "If statement",
+              code: `const score = 85;
+if (score >= 70) {
+  console.log("Pass");
+}`,
+              output: "Pass",
+              explanation: "The condition is true, so the block runs."
+            },
+            {
+              title: "For loop",
+              code: `for (let i = 0; i < 3; i++) {
+  console.log(i);
+}`,
+              output: "0\n1\n2",
+              explanation: "The loop repeats while the condition stays true."
+            }
+          ],
+          playground: `for (let i = 1; i <= 3; i++) {
+  console.log("Step " + i);
+}`,
+          execution: [
+            "The loop starts with i = 1.",
+            "The body runs and prints the step.",
+            "The counter updates until the condition fails."
+          ],
+          mistakes: [
+            "Creating infinite loops by never changing the counter.",
+            "Using = instead of === inside a condition."
+          ],
+          practices: [
+            "Write an if statement for a passing grade.",
+            "Create a loop that prints numbers from 1 to 5."
+          ],
+          quiz: [
+            { q: "What does a loop do?", options: ["Creates objects", "Repeats code", "Deletes variables", "Creates strings"], answer: 1 },
+            { q: "What is the purpose of else?", options: ["It starts a loop", "It is the fallback branch", "It declares a variable", "It creates arrays"], answer: 1 }
+          ],
+          challenge: {
+            prompt: "Print the even numbers from 2 to 10 using a loop.",
+            starter: `for (let i = 2; i <= 10; i++) {}` ,
+            solution: `for (let i = 2; i <= 10; i += 2) {
+  console.log(i);
+}`
+          }
+        },
+        {
+          id: "functions",
+          title: "Functions & Closures",
+          subtitle: "Reusable blocks of logic and private state",
+          tutorNotes: "Functions are reusable blocks of code. They can be declared, expressed, assigned to variables, used as callbacks, and nested. Closures let an inner function remember variables from an outer scope.",
+          intro: "Functions make your code organized. A function is like a mini machine: you give it input, it does work, and it returns a result.",
+          deepExplanation: "A function can take parameters, use arguments, return a value, or simply perform side effects. Closures are especially powerful because they let inner functions retain access to their outer variables even after the outer function finishes running.",
+          visual: [
+            "Function call → body runs → return value",
+            "Closure → remembers outer variables"
+          ],
+          syntax: `function greet(name) {
+  return "Hello " + name;
+}`,
+          examples: [
+            {
+              title: "Function declaration",
+              code: `function add(a, b) {
+  return a + b;
+}
+console.log(add(2, 3));`,
+              output: "5",
+              explanation: "The function accepts two arguments and returns their sum."
+            },
+            {
+              title: "Arrow function",
+              code: `const square = x => x * x;
+console.log(square(4));`,
+              output: "16",
+              explanation: "Arrow functions are shorter and often used in modern JavaScript."
+            }
+          ],
+          playground: `function greet(name) {
+  return "Hello " + name;
+}
+console.log(greet("Sam"));`,
+          execution: [
+            "The function is defined.",
+            "It is called with the argument " + "Sam" + ".",
+            "It returns and logs a greeting."
+          ],
+          mistakes: [
+            "Forgetting to return a value.",
+            "Confusing parameters with arguments."
+          ],
+          practices: [
+            "Write a function that doubles a number.",
+            "Create a callback using Array.prototype.map."
+          ],
+          quiz: [
+            { q: "What is a parameter?", options: ["A function call", "A value passed into a function", "A returned value", "A loop counter"], answer: 1 },
+            { q: "What does a closure remember?", options: ["Only global variables", "Outer scope variables", "Loop counters", "All arrays"], answer: 1 }
+          ],
+          challenge: {
+            prompt: "Create a function that returns the square of a number.",
+            starter: `function square(x) {}`,
+            solution: `function square(x) {
+  return x * x;
+}`
+          }
+        },
+        {
+          id: "collections",
+          title: "Arrays, Objects & Methods",
+          subtitle: "Organizing related data effectively",
+          tutorNotes: "Arrays are lists of values. Objects store data as key-value pairs. Methods help transform and inspect those values.",
+          intro: "Collections let you organize information that belongs together. Arrays are ordered lists, while objects are named buckets of data.",
+          deepExplanation: "Arrays are ideal for sequences such as scores or tasks. Objects are ideal for records such as profiles or settings. JavaScript methods make it easy to transform and query these structures.",
+          visual: [
+            "Array: ['apple', 'banana']",
+            "Object: { name: 'Ada', age: 36 }"
+          ],
+          syntax: `const fruits = ["apple", "banana"];
+const user = { name: "Ada", age: 36 };`,
+          examples: [
+            {
+              title: "Array methods",
+              code: `const numbers = [1, 2, 3];
+console.log(numbers.map(n => n * 2));`,
+              output: "2,4,6",
+              explanation: "map transforms every item in the array."
+            },
+            {
+              title: "Object access",
+              code: `const user = { name: "Ada", age: 36 };
+console.log(user.name);`,
+              output: "Ada",
+              explanation: "Objects use keys to access their values."
+            }
+          ],
+          playground: `const tasks = ["Read", "Code", "Review"];
+console.log(tasks.length);`,
+          execution: [
+            "The array is created.",
+            "Its length is read.",
+            "The number of items is printed."
+          ],
+          mistakes: [
+            "Mixing up index positions with values.",
+            "Using arrays where objects are more appropriate."
+          ],
+          practices: [
+            "Create an array of three colors.",
+            "Create an object for a student profile."
+          ],
+          quiz: [
+            { q: "Which structure uses key-value pairs?", options: ["Array", "String", "Object", "Number"], answer: 2 },
+            { q: "How do you access the first element of an array?", options: ["items[0]", "items.first", "items(0)", "items{0}"], answer: 0 }
+          ],
+          challenge: {
+            prompt: "Create an array of three hobbies and log the second item.",
+            starter: `const hobbies = [];`,
+            solution: `const hobbies = ["reading", "cycling", "music"];
+console.log(hobbies[1]);`
+          }
+        },
+        {
+          id: "dom",
+          title: "DOM, Events & Forms",
+          subtitle: "Making webpages interactive",
+          tutorNotes: "The DOM represents the structure of a webpage. Events happen when users click, hover, or submit forms.",
+          intro: "The Document Object Model (DOM) is the browser’s JavaScript view of the webpage. It lets you read and update content, styles, and structure.",
+          deepExplanation: "You can listen for events such as clicks and form submissions, then respond by changing text, hiding elements, or validating input. This is the bridge between your JavaScript logic and the page users see.",
+          visual: [
+            "DOM tree → elements inside elements",
+            "Event → listener → update"
+          ],
+          syntax: `document.querySelector("#demo").textContent = "Updated";`,
+          examples: [
+            {
+              title: "Change text",
+              code: `document.body.innerHTML = "<h2>Hello</h2>";`,
+              output: "Renders an h2 element",
+              explanation: "You can update the page content from JavaScript."
+            },
+            {
+              title: "Handle a click",
+              code: `document.addEventListener("click", () => console.log("Clicked"));`,
+              output: "Clicked when the page is clicked",
+              explanation: "Events let your script react to user actions."
+            }
+          ],
+          playground: `document.body.innerHTML = "<p>Interactive page</p>";`,
+          execution: [
+            "The DOM node is selected.",
+            "The content is updated.",
+            "The browser draws the new markup."
+          ],
+          mistakes: [
+            "Trying to access an element before the page has loaded.",
+            "Forgetting to use addEventListener instead of inline handlers."
+          ],
+          practices: [
+            "Create a paragraph that changes when a button is clicked.",
+            "Attach a click event to an element."
+          ],
+          quiz: [
+            { q: "What does DOM stand for?", options: ["Data Object Module", "Document Object Model", "Direct Object Method", "Documented Object Markup"], answer: 1 },
+            { q: "Which method listens for an event?", options: ["addEventListener", "createElement", "querySelector", "console.log"], answer: 0 }
+          ],
+          challenge: {
+            prompt: "Create a button that changes the page text when clicked.",
+            starter: `const button = document.createElement("button");`,
+            solution: `const button = document.createElement("button");
+button.textContent = "Click me";
+document.body.appendChild(button);
+button.addEventListener("click", () => {
+  document.body.innerHTML = "<p>Clicked!</p>";
+});`
+          }
+        },
+        {
+          id: "async",
+          title: "Async JavaScript, Fetch & Storage",
+          subtitle: "Handling time and network work gracefully",
+          tutorNotes: "JavaScript supports promises, async/await, Fetch API, and browser storage such as localStorage and sessionStorage.",
+          intro: "Some tasks take time, such as waiting for a server response or loading data. Async JavaScript helps you handle these operations without freezing the page.",
+          deepExplanation: "Promises represent future values. async/await makes asynchronous code easier to read. Fetch API is commonly used to request data from a server, and localStorage stores information in the browser.",
+          visual: [
+            "Promise → pending → resolved/rejected",
+            "async/await → cleaner asynchronous code"
+          ],
+          syntax: `async function loadData() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+  const data = await response.json();
+  console.log(data);
+}`,
+          examples: [
+            {
+              title: "Promise",
+              code: `const promise = new Promise(resolve => resolve("done"));
+promise.then(value => console.log(value));`,
+              output: "done",
+              explanation: "A promise resolves to a value later."
+            },
+            {
+              title: "localStorage",
+              code: `localStorage.setItem("name", "Ava");
+console.log(localStorage.getItem("name"));`,
+              output: "Ava",
+              explanation: "Browser storage keeps data between page loads."
+            }
+          ],
+          playground: `localStorage.setItem("lesson", "async");
+console.log(localStorage.getItem("lesson"));`,
+          execution: [
+            "The value is written to browser storage.",
+            "The stored value is read back.",
+            "The result is printed."
+          ],
+          mistakes: [
+            "Forgetting to await an async function.",
+            "Using localStorage without checking whether the browser supports it."
+          ],
+          practices: [
+            "Store a user name in localStorage.",
+            "Read that stored value and print it."
+          ],
+          quiz: [
+            { q: "What does async/await help with?", options: ["Creating loops", "Reading files only", "Writing easier asynchronous code", "Removing variables"], answer: 2 },
+            { q: "Which API fetches data from a server?", options: ["Fetch API", "Math API", "Array API", "Storage API"], answer: 0 }
+          ],
+          challenge: {
+            prompt: "Store a favorite color in localStorage and retrieve it.",
+            starter: `localStorage.setItem("favoriteColor", "blue");`,
+            solution: `localStorage.setItem("favoriteColor", "blue");
+console.log(localStorage.getItem("favoriteColor"));`
+          }
+        }
+      ];
+
+      const state = {
+        currentLesson: 0,
+        completed: [],
+        bookmarks: [],
+        search: ""
+      };
+
+      const STORAGE_KEY = "js-mastery-lab-state";
+
+      function loadState() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+          if (saved) {
+            state.completed = Array.isArray(saved.completed) ? saved.completed : [];
+            state.bookmarks = Array.isArray(saved.bookmarks) ? saved.bookmarks : [];
+            state.currentLesson = Number.isInteger(saved.currentLesson) ? saved.currentLesson : 0;
+          }
+        } catch (error) {
+          console.warn("Could not load saved state", error);
+        }
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ completed: state.completed, bookmarks: state.bookmarks, currentLesson: state.currentLesson }));
+      }
+
+      function initTheme() {
+        const saved = localStorage.getItem("js-theme") || "light";
+        document.body.classList.toggle("dark", saved === "dark");
+      }
+
+      function toggleTheme() {
+        const dark = document.body.classList.toggle("dark");
+        localStorage.setItem("js-theme", dark ? "dark" : "light");
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;");
+      }
+
+      function highlight(text) {
+        const term = state.search.trim().toLowerCase();
+        if (!term) return escapeHtml(text);
+        const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "ig");
+        return escapeHtml(text).replace(regex, "<mark>$1</mark>");
+      }
+
+      function renderLessonNav() {
+        const search = state.search.toLowerCase();
+        const list = document.getElementById("lessonNav");
+        const filtered = lessons.filter((lesson) => {
+          if (!search) return true;
+          return `${lesson.title} ${lesson.subtitle} ${lesson.tutorNotes}`.toLowerCase().includes(search);
+        });
+
+        document.getElementById("filterPill").textContent = search ? "Filtered" : "All";
+        list.innerHTML = "";
+
+        if (!filtered.length) {
+          list.innerHTML = '<div class="empty-state">No lessons match your search.</div>';
+          return;
+        }
+
+        filtered.forEach((lesson, i) => {
+          const originalIndex = lessons.findIndex((entry) => entry.id === lesson.id);
+          const isActive = originalIndex === state.currentLesson;
+          const isComplete = state.completed.includes(originalIndex);
+          const isBookmarked = state.bookmarks.includes(originalIndex);
+          const item = document.createElement("button");
+          item.className = `lesson-nav-item ${isActive ? "active" : ""}`;
+          item.type = "button";
+          item.onclick = () => {
+            state.currentLesson = originalIndex;
+            saveState();
+            render();
+          };
+          item.innerHTML = `
+            <div>
+              <div class="nav-title">${highlight(lesson.title)}</div>
+              <div class="nav-meta">${highlight(lesson.subtitle)}</div>
+            </div>
+            <div style="display:grid; gap:0.35rem; justify-items:end;">
+              ${isComplete ? '<span class="pill complete">✓ Done</span>' : ""}
+              ${isBookmarked ? '<span class="pill bookmarked">★ Saved</span>' : ""}
+            </div>`;
+          list.appendChild(item);
+        });
+      }
+
+      function renderProgress() {
+        const total = lessons.length;
+        const complete = state.completed.length;
+        const percent = Math.round((complete / total) * 100);
+        document.getElementById("progressBar").style.width = `${percent}%`;
+        document.getElementById("progressText").textContent = `${percent}% complete · ${complete}/${total} lessons done`;
+        document.getElementById("lessonCount").textContent = total;
+        document.getElementById("completedCount").textContent = complete;
+        document.getElementById("bookmarkCount").textContent = state.bookmarks.length;
+      }
+
+      function renderLessonContent() {
+        const lesson = lessons[state.currentLesson];
+        const section = document.getElementById("lessonContent");
+
+        if (!lesson) {
+          section.innerHTML = '<div class="lesson-card empty-state">Select a lesson to begin.</div>';
+          return;
+        }
+
+        const isComplete = state.completed.includes(state.currentLesson);
+        const isBookmarked = state.bookmarks.includes(state.currentLesson);
+
+        section.innerHTML = `
+          <article class="lesson-card">
+            <div class="lesson-header">
+              <div>
+                <div class="eyebrow">${highlight(lesson.title)}</div>
+                <h2>${highlight(lesson.subtitle)}</h2>
+                <p>${highlight(lesson.tutorNotes)}</p>
+              </div>
+              <div class="lesson-actions">
+                <button class="btn btn-secondary" data-action="bookmark">${isBookmarked ? "★ Bookmarked" : "☆ Bookmark"}</button>
+                <button class="btn btn-primary" data-action="complete">${isComplete ? "✓ Completed" : "Mark complete"}</button>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <details open>
+                <summary>1. Topic introduction</summary>
+                <div class="section-body">
+                  <p>${escapeHtml(lesson.intro)}</p>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details open>
+                <summary>2. Deep explanation</summary>
+                <div class="section-body">
+                  <p>${escapeHtml(lesson.deepExplanation)}</p>
+                  <div class="grid-2" style="margin-top: 0.75rem;">
+                    ${lesson.visual.map((item) => `<div class="mini-card">${escapeHtml(item)}</div>`).join("")}
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>3. Syntax</summary>
+                <div class="section-body">
+                  <pre class="code-block">${escapeHtml(lesson.syntax)}</pre>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>4. Examples</summary>
+                <div class="section-body">
+                  <div class="grid-2">
+                    ${lesson.examples.map((example) => `
+                      <div class="mini-card">
+                        <h4>${escapeHtml(example.title)}</h4>
+                        <pre class="code-block">${escapeHtml(example.code)}</pre>
+                        <p><strong>Output:</strong> ${escapeHtml(example.output)}</p>
+                        <p>${escapeHtml(example.explanation)}</p>
+                      </div>`).join("")}
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>5. Interactive code editor</summary>
+                <div class="section-body">
+                  <div class="editor-shell">
+                    <div class="code-toolbar">
+                      <strong>Playground</strong>
+                      <div class="lesson-actions">
+                        <button class="btn btn-secondary" data-action="run">Run code</button>
+                        <button class="btn btn-secondary" data-action="reset">Reset</button>
+                        <button class="btn btn-secondary" data-action="copy">Copy</button>
+                      </div>
+                    </div>
+                    <textarea id="playgroundEditor" aria-label="JavaScript playground">${escapeHtml(lesson.playground)}</textarea>
+                    <div class="output" id="playgroundOutput">Output will appear here.</div>
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>6. Step-by-step execution</summary>
+                <div class="section-body">
+                  <ul class="check-list">
+                    ${lesson.execution.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>7. Common mistakes</summary>
+                <div class="section-body">
+                  <ul class="check-list">
+                    ${lesson.mistakes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>8. Best practices</summary>
+                <div class="section-body">
+                  <ul class="check-list">
+                    <li>Use clear names.</li>
+                    <li>Keep code simple and readable.</li>
+                    <li>Test small examples before building larger features.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>9. Interview questions</summary>
+                <div class="section-body">
+                  <ul class="check-list">
+                    <li>What is the difference between let, const, and var?</li>
+                    <li>How does hoisting change the way you think about declarations?</li>
+                    <li>What is the difference between primitive and non-primitive values?</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>10. Summary</summary>
+                <div class="section-body">
+                  <p>${escapeHtml(lesson.tutorNotes)}</p>
+                  <p>Practice makes the concept stick. Revisit the examples, then try the challenge below.</p>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>11. Practice problems</summary>
+                <div class="section-body">
+                  <ul class="check-list">
+                    ${lesson.practices.map((practice) => `<li>${escapeHtml(practice)}</li>`).join("")}
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>12. Quiz</summary>
+                <div class="section-body">
+                  <div class="quiz-grid">
+                    ${lesson.quiz.map((entry, index) => `
+                      <div class="quiz-card">
+                        <p><strong>${index + 1}. ${escapeHtml(entry.q)}</strong></p>
+                        <div class="quiz-grid">
+                          ${entry.options.map((option, optionIndex) => `<button class="quiz-option" data-answer="${optionIndex}" data-index="${index}">${escapeHtml(option)}</button>`).join("")}
+                        </div>
+                      </div>`).join("")}
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="section-card">
+              <details>
+                <summary>13. Coding challenge</summary>
+                <div class="section-body">
+                  <p>${escapeHtml(lesson.challenge.prompt)}</p>
+                  <pre class="code-block">${escapeHtml(lesson.challenge.starter)}</pre>
+                  <div class="lesson-actions" style="margin-top: 0.8rem;">
+                    <button class="btn btn-secondary" data-action="show-solution">Show solution</button>
+                  </div>
+                  <div id="challengeSolution" class="section-body" style="display:none; margin-top:0.75rem;">
+                    <pre class="code-block">${escapeHtml(lesson.challenge.solution)}</pre>
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="lesson-actions" style="margin-top: 1rem;">
+              <button class="btn btn-secondary" data-action="prev">← Previous lesson</button>
+              <button class="btn btn-primary" data-action="next">Next lesson →</button>
+            </div>
+          </article>
+        `;
+
+        document.querySelectorAll("[data-action='run']").forEach((button) => {
+          button.addEventListener("click", runPlayground);
+        });
+        document.querySelectorAll("[data-action='reset']").forEach((button) => {
+          button.addEventListener("click", resetPlayground);
+        });
+        document.querySelectorAll("[data-action='copy']").forEach((button) => {
+          button.addEventListener("click", copyPlayground);
+        });
+        document.querySelectorAll("[data-action='show-solution']").forEach((button) => {
+          button.addEventListener("click", () => {
+            document.getElementById("challengeSolution").style.display = "block";
+          });
+        });
+        document.querySelectorAll(".quiz-option").forEach((button) => {
+          button.addEventListener("click", handleQuizAnswer);
+        });
+        document.querySelectorAll("[data-action='complete']").forEach((button) => {
+          button.addEventListener("click", toggleComplete);
+        });
+        document.querySelectorAll("[data-action='bookmark']").forEach((button) => {
+          button.addEventListener("click", toggleBookmark);
+        });
+        document.querySelectorAll("[data-action='prev']").forEach((button) => {
+          button.addEventListener("click", goPrev);
+        });
+        document.querySelectorAll("[data-action='next']").forEach((button) => {
+          button.addEventListener("click", goNext);
+        });
+      }
+
+      function runPlayground() {
+        const editor = document.getElementById("playgroundEditor");
+        const output = document.getElementById("playgroundOutput");
+        const logs = [];
+        const consoleProxy = {
+          log: (...args) => logs.push(args.map((arg) => String(arg)).join(" "))
+        };
+
+        try {
+          const fn = new Function("console", editor.value);
+          fn(consoleProxy);
+          output.textContent = logs.length ? logs.join("\n") : "No output.";
+        } catch (error) {
+          output.textContent = error.message;
+        }
+      }
+
+      function resetPlayground() {
+        const editor = document.getElementById("playgroundEditor");
+        editor.value = lessons[state.currentLesson].playground;
+        document.getElementById("playgroundOutput").textContent = "Output will appear here.";
+      }
+
+      function copyPlayground() {
+        const editor = document.getElementById("playgroundEditor");
+        navigator.clipboard.writeText(editor.value).then(() => {
+          const output = document.getElementById("playgroundOutput");
+          output.textContent = "Copied to clipboard.";
+        });
+      }
+
+      function handleQuizAnswer(event) {
+        const button = event.currentTarget;
+        const qIndex = Number(button.dataset.index);
+        const answerIndex = Number(button.dataset.answer);
+        const lesson = lessons[state.currentLesson];
+        const correctIndex = lesson.quiz[qIndex].answer;
+        const options = button.parentElement.querySelectorAll(".quiz-option");
+        options.forEach((option, idx) => {
+          option.classList.remove("correct", "incorrect");
+          if (idx === correctIndex) option.classList.add("correct");
+          if (idx === answerIndex && idx !== correctIndex) option.classList.add("incorrect");
+        });
+      }
+
+      function toggleComplete() {
+        if (state.completed.includes(state.currentLesson)) {
+          state.completed = state.completed.filter((item) => item !== state.currentLesson);
+        } else {
+          state.completed.push(state.currentLesson);
+        }
+        saveState();
+        render();
+      }
+
+      function toggleBookmark() {
+        if (state.bookmarks.includes(state.currentLesson)) {
+          state.bookmarks = state.bookmarks.filter((item) => item !== state.currentLesson);
+        } else {
+          state.bookmarks.push(state.currentLesson);
+        }
+        saveState();
+        render();
+      }
+
+      function goPrev() {
+        state.currentLesson = (state.currentLesson - 1 + lessons.length) % lessons.length;
+        saveState();
+        render();
+      }
+
+      function goNext() {
+        state.currentLesson = (state.currentLesson + 1) % lessons.length;
+        saveState();
+        render();
+      }
+
+      function render() {
+        renderLessonNav();
+        renderLessonContent();
+        renderProgress();
+      }
+
+      document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+      document.getElementById("lessonSearch").addEventListener("input", (event) => {
+        state.search = event.target.value;
+        renderLessonNav();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "/") {
+          event.preventDefault();
+          document.getElementById("lessonSearch").focus();
+        }
+      });
+
+      loadState();
+      initTheme();
+      render();
+    </script>
+  </body>
+</html>
